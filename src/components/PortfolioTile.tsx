@@ -14,7 +14,7 @@ export function PortfolioTile({ project }: { project: Project }) {
       >
         <div className="flex items-start justify-between">
           <span className="eyebrow bg-deep/70 px-2 py-1 text-[10px]">
-            {project.category}
+            {project.objectType}
           </span>
           <span className="text-xs text-ink/70">{project.year}</span>
         </div>

@@ -21,21 +21,24 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(studio.url),
   title: {
-    default: `${studio.fullName} — дизайн интерьера в Ташкенте`,
+    default: `${studio.name} — студия дизайна интерьеров | Дизайн-проект и комплектация под ключ`,
     template: `%s — ${studio.name}`,
   },
-  description: studio.description,
+  description:
+    "Разрабатываем интерьеры в стиле винтажа и ретрофутуризма. Полный цикл: от дизайн-проекта до готового помещения — комплектация, реализация, декор, арт-объекты. Студия в Ташкенте.",
   keywords: [
     "дизайн интерьера Ташкент",
     "дизайн-проект",
     "комплектация интерьера",
     "студия дизайна интерьера",
     "дизайнер интерьера Ташкент",
+    "арт-объекты на заказ",
+    "винтаж и ретрофутуризм",
     "ATRIUM",
   ],
   authors: [{ name: studio.founder }],
   openGraph: {
-    title: `${studio.fullName} — дизайн интерьера в Ташкенте`,
+    title: `${studio.name} — студия дизайна интерьеров | Дизайн-проект и комплектация под ключ`,
     description: studio.description,
     url: studio.url,
     siteName: studio.name,

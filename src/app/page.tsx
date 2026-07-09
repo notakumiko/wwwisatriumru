@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SectionHeading } from "@/components/SectionHeading";
 import { PortfolioTile } from "@/components/PortfolioTile";
+import { MiniLeadForm } from "@/components/MiniLeadForm";
 import { studio, manifestoText, highlights } from "@/content/studio";
 import { services } from "@/content/services";
 import { projects } from "@/content/projects";
@@ -9,10 +10,11 @@ import { articles } from "@/content/articles";
 
 const process = [
   { step: "01", title: "Бриф", text: "Разговариваем о том, как вы живёте в пространстве — не о трендах." },
-  { step: "02", title: "Концепция", text: "Формируем идею интерьера, материалы и фактуры объекта." },
+  { step: "02", title: "Идея", text: "Формируем концепцию интерьера, материалы и фактуры объекта." },
   { step: "03", title: "Дизайн-проект", text: "3D-визуализация и полная рабочая документация." },
   { step: "04", title: "Комплектация", text: "Подбираем и поставляем мебель, материалы, авторский декор." },
-  { step: "05", title: "Реализация", text: "Ведём авторский надзор до финальной расстановки." },
+  { step: "05", title: "Реализация", text: "Координируем подрядчиков, ведём авторский надзор." },
+  { step: "06", title: "Сдача объекта", text: "Шеф-монтаж, стайлинг и передача готового интерьера." },
 ];
 
 export default function Home() {
@@ -92,20 +94,20 @@ export default function Home() {
         <div className="container-xl">
           <SectionHeading
             eyebrow="Услуги"
-            title="Два направления, один результат"
-            description="Полный дизайн-проект и полная комплектация — по отдельности или единым циклом, в зависимости от стадии вашего объекта."
+            title="Пять направлений, один результат"
+            description="Полный цикл создания интерьера — от дизайн-проекта до готового помещения. Берите весь цикл или отдельные этапы."
           />
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
             {services.map((service) => (
               <Link
                 key={service.slug}
-                href={`/services#${service.slug}`}
-                className="group border border-line bg-surface p-8 transition-colors hover:border-accent"
+                href={`/services/${service.slug}`}
+                className="group flex flex-col border border-line bg-surface p-6 transition-colors hover:border-accent"
               >
-                <h3 className="font-serif-display text-2xl text-ink">{service.title}</h3>
-                <p className="mt-4 text-sm leading-relaxed text-stone">{service.short}</p>
-                <span className="mt-6 inline-flex items-center gap-2 text-sm text-accent-light">
-                  Узнать подробнее
+                <h3 className="font-serif-display text-xl text-ink">{service.title}</h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-stone">{service.short}</p>
+                <span className="mt-5 inline-flex items-center gap-2 text-sm text-accent-light">
+                  Подробнее
                   <span className="transition-transform group-hover:translate-x-1">→</span>
                 </span>
               </Link>
@@ -123,8 +125,8 @@ export default function Home() {
               title="Материалы, которые нельзя скопировать"
               description="Витражи, стекло, барельефы и керамика создаются частными мастерами и становятся частью архитектуры пространства — а не декором поверх неё."
             />
-            <Link href="/about#remeslo" className="btn-secondary mt-8 inline-flex">
-              Как мы это делаем
+            <Link href="/services/art-obekty" className="btn-secondary mt-8 inline-flex">
+              Арт-объекты на заказ
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-4 md:col-span-7">
@@ -149,7 +151,7 @@ export default function Home() {
       <section className="section">
         <div className="container-xl">
           <SectionHeading eyebrow="Процесс" title="Как мы работаем" />
-          <div className="mt-12 grid gap-8 md:grid-cols-5">
+          <div className="mt-12 grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
             {process.map((item) => (
               <div key={item.step} className="border-t border-line pt-6">
                 <div className="font-serif-display text-2xl text-accent-light">{item.step}</div>
@@ -220,24 +222,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FINAL CTA */}
+      {/* CONTACT / LEAD FORM */}
       <section className="section border-t border-line">
-        <div className="container-xl grid gap-10 md:grid-cols-2 md:items-center">
+        <div className="container-xl grid gap-12 md:grid-cols-2 md:items-start">
           <div>
+            <p className="eyebrow mb-4">Контакты</p>
             <h2 className="font-serif-display text-3xl leading-tight text-ink sm:text-4xl">
               Расскажите о своём объекте
             </h2>
             <p className="mt-4 max-w-md text-base leading-relaxed text-stone">
-              Короткая консультация — имя, контакт и пара слов о задаче. Ответим в течение рабочего дня.
+              Короткая заявка — имя, телефон и тип объекта. Ответим в течение
+              рабочего дня и предложим формат работы под вашу стадию.
             </p>
+            <div className="mt-8 flex flex-col gap-3 border-t border-line pt-8 text-sm text-stone">
+              <a href={studio.contacts.telegram} target="_blank" rel="noopener noreferrer" className="hover:text-accent-light">
+                Telegram {studio.contacts.telegramHandle}
+              </a>
+              <a href={studio.contacts.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-accent-light">
+                WhatsApp {studio.contacts.whatsappDisplay}
+              </a>
+              <a href={studio.contacts.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-accent-light">
+                Instagram {studio.contacts.instagramHandle}
+              </a>
+            </div>
           </div>
-          <div className="flex flex-col gap-4 sm:flex-row md:justify-end">
-            <Link href="/contact" className="btn-primary">
-              Оставить заявку
-            </Link>
-            <a href={studio.contacts.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-secondary">
-              Написать в WhatsApp
-            </a>
+          <div className="border border-line p-8 md:p-10">
+            <MiniLeadForm />
           </div>
         </div>
       </section>

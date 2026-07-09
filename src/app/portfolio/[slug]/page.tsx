@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { projects } from "@/content/projects";
+import { getService } from "@/content/services";
 import { studio } from "@/content/studio";
 
 export function generateStaticParams() {
@@ -17,7 +18,7 @@ export async function generateMetadata({
   const project = projects.find((p) => p.slug === slug);
   if (!project) return {};
   return {
-    title: project.title,
+    title: `${project.title} — ${project.location}`,
     description: project.summary,
   };
 }
@@ -33,16 +34,35 @@ export default async function ProjectPage({
 
   const [from, to] = project.palette;
   const others = projects.filter((p) => p.slug !== project.slug).slice(0, 3);
+  const usedServices = project.servicesUsed
+    .map((s) => getService(s))
+    .filter((s): s is NonNullable<typeof s> => Boolean(s));
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.summary,
+    creator: { "@type": "Organization", name: studio.fullName, url: studio.url },
+    locationCreated: { "@type": "Place", name: project.location },
+    dateCreated: project.year,
+    url: `${studio.url}/portfolio/${project.slug}`,
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <section className="border-b border-line bg-surface">
         <div className="container-xl py-16 md:py-20">
           <Link href="/portfolio" className="text-sm text-stone hover:text-accent-light">
             ← Всё портфолио
           </Link>
           <p className="eyebrow mb-4 mt-6">
-            {project.category} · {project.location}
+            {project.objectType} · {project.location}
           </p>
           <h1 className="font-serif-display max-w-3xl text-4xl leading-tight text-ink sm:text-5xl">
             {project.title}
@@ -50,9 +70,12 @@ export default async function ProjectPage({
         </div>
       </section>
 
+      {/* Галерея-заглушка: заменить на реальные фотографии проекта */}
       <section
         className="aspect-[16/9] w-full"
         style={{ backgroundImage: `linear-gradient(160deg, ${from} 0%, ${to} 100%)` }}
+        role="img"
+        aria-label={`${project.title} — интерьер в стиле ${project.style.toLowerCase()}, ${project.location}`}
       />
 
       <section className="section">
@@ -62,6 +85,10 @@ export default async function ProjectPage({
               <div className="border-t border-line pt-4">
                 <dt className="eyebrow">Локация</dt>
                 <dd className="mt-1 text-base text-ink">{project.location}</dd>
+              </div>
+              <div className="border-t border-line pt-4">
+                <dt className="eyebrow">Тип объекта</dt>
+                <dd className="mt-1 text-base text-ink">{project.objectType}</dd>
               </div>
               <div className="border-t border-line pt-4">
                 <dt className="eyebrow">Стиль</dt>
@@ -75,25 +102,72 @@ export default async function ProjectPage({
                 <dt className="eyebrow">Год</dt>
                 <dd className="mt-1 text-base text-ink">{project.year}</dd>
               </div>
+              <div className="border-t border-line pt-4">
+                <dt className="eyebrow">Услуги студии</dt>
+                <dd className="mt-2 flex flex-col gap-2">
+                  {usedServices.map((service) => (
+                    <Link
+                      key={service.slug}
+                      href={`/services/${service.slug}`}
+                      className="text-sm text-ink transition-colors hover:text-accent-light"
+                    >
+                      {service.title} →
+                    </Link>
+                  ))}
+                </dd>
+              </div>
             </dl>
           </div>
+
           <div className="md:col-span-8">
-            <p className="text-lg leading-relaxed text-ink/90">{project.summary}</p>
-            <div className="mt-8 flex flex-col gap-5 border-t border-line pt-8">
-              {project.story.map((p, i) => (
-                <p key={i} className="text-base leading-relaxed text-stone">
-                  {p}
-                </p>
-              ))}
+            <div>
+              <p className="eyebrow mb-4">Задача</p>
+              <p className="text-lg leading-relaxed text-ink/90">{project.task}</p>
             </div>
-            <a
-              href={studio.contacts.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary mt-10 inline-flex"
-            >
-              Обсудить похожий проект
-            </a>
+
+            <div className="mt-10 border-t border-line pt-8">
+              <p className="eyebrow mb-4">Решение</p>
+              <div className="flex flex-col gap-4">
+                {project.solution.map((p, i) => (
+                  <p key={i} className="text-base leading-relaxed text-stone">
+                    {p}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-10 border-t border-line pt-8">
+              <p className="eyebrow mb-4">Материалы и предметы</p>
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {project.materials.map((m) => (
+                  <li key={m} className="flex gap-3 text-sm leading-relaxed text-stone">
+                    <span className="text-accent-light">·</span>
+                    {m}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {project.quote && (
+              <figure className="mt-10 border border-line p-8">
+                <blockquote className="font-serif-display text-xl leading-relaxed text-ink/90">
+                  “{project.quote.text}”
+                </blockquote>
+                <figcaption className="mt-4 text-sm text-stone">{project.quote.author}</figcaption>
+              </figure>
+            )}
+
+            <div className="mt-10 border-t border-line pt-8">
+              <p className="text-base text-ink/90">Хотите такой же результат?</p>
+              <a
+                href={studio.contacts.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary mt-4 inline-flex"
+              >
+                Обсудим ваш проект
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -110,6 +184,8 @@ export default async function ProjectPage({
                     style={{
                       backgroundImage: `linear-gradient(155deg, ${p.palette[0]} 0%, ${p.palette[1]} 100%)`,
                     }}
+                    role="img"
+                    aria-label={`${p.title} — ${p.location}`}
                   />
                   <h3 className="mt-4 font-serif-display text-lg text-ink">{p.title}</h3>
                   <p className="text-sm text-stone">{p.location}</p>
