@@ -5,7 +5,7 @@ import { studio } from "@/content/studio";
 export const metadata: Metadata = {
   title: "Контакты",
   description:
-    "Свяжитесь со студией ATRIUM в Ташкенте: WhatsApp, Telegram, Instagram и e-mail. Ведём проекты также в Испании, на юге России, в Москве и Санкт-Петербурге.",
+    "Свяжитесь со студией ATRIUM: WhatsApp, Telegram, Instagram и e-mail. Ведём проекты в Москве, Санкт-Петербурге, Сочи, Ташкенте и Аликанте.",
 };
 
 export default function ContactPage() {
@@ -52,9 +52,8 @@ export default function ContactPage() {
             </a>
           </div>
 
-          <div className="mt-8 flex flex-col gap-3 border-t border-line pt-8 text-sm text-stone">
+          <div className="mt-8 border-t border-line pt-8 text-sm text-stone">
             <p>{studio.address}</p>
-            <p>География проектов: {studio.geo.join(" · ")}</p>
           </div>
         </div>
 

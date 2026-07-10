@@ -1,11 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SectionHeading } from "@/components/SectionHeading";
 import { PortfolioTile } from "@/components/PortfolioTile";
 import { MiniLeadForm } from "@/components/MiniLeadForm";
-import { studio, manifestoText, highlights } from "@/content/studio";
+import { studio, manifestoText, highlights, clients } from "@/content/studio";
 import { services } from "@/content/services";
 import { projects } from "@/content/projects";
-import { testimonials } from "@/content/testimonials";
 import { articles } from "@/content/articles";
 
 const process = [
@@ -21,14 +21,23 @@ export default function Home() {
   return (
     <>
       {/* HERO — полноэкранный, кинематографичный */}
-      <section className="texture-plaster relative flex min-h-[92vh] items-end border-b border-line">
-        <div className="container-xl w-full pb-20 pt-32 md:pb-28">
-          <p className="eyebrow mb-8">{studio.fullName} · Ташкент · с {studio.yearFounded} года</p>
+      <section className="relative flex min-h-[92vh] items-end overflow-hidden border-b border-line">
+        <Image
+          src="/hero.jpg"
+          alt="Интерьер студии ATRIUM"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-deep via-deep/50 to-deep/10" />
+        <div className="container-xl relative w-full pb-20 pt-32 md:pb-28">
+          <p className="eyebrow mb-8">{studio.fullName} · {studio.geo.join(" · ")}</p>
           <h1 className="font-serif-display max-w-4xl text-5xl leading-[1.05] text-ink sm:text-6xl md:text-7xl">
             {manifestoText.title}
           </h1>
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-stone">
-            {studio.description}
+            {studio.tagline}
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Link href="/portfolio" className="btn-primary">
@@ -75,7 +84,7 @@ export default function Home() {
             <SectionHeading
               eyebrow="Портфолио"
               title="Избранные объекты"
-              description="Жилые и коммерческие интерьеры в Ташкенте, Испании, на юге России, в Москве и Санкт-Петербурге."
+              description={`Жилые и коммерческие интерьеры: ${studio.geo.join(", ")}.`}
             />
             <Link href="/portfolio" className="btn-secondary">
               Всё портфолио
@@ -130,17 +139,22 @@ export default function Home() {
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-4 md:col-span-7">
-            {["Витражи", "Стекло ручной работы", "Барельефы", "Керамика"].map((craft, i) => (
-              <div
-                key={craft}
-                className="flex aspect-square flex-col justify-end p-6"
-                style={{
-                  backgroundImage: `linear-gradient(160deg, ${
-                    ["#2e2620", "#26201a", "#332a1f", "#2a231c"][i]
-                  } 0%, ${["#8f6d3f", "#6b5233", "#b6905b", "#7d6440"][i]} 100%)`,
-                }}
-              >
-                <span className="font-serif-display text-lg text-ink">{craft}</span>
+            {[
+              { label: "Витражи", img: "/craft-vitrazhi.jpg" },
+              { label: "Стекло ручной работы", img: "/craft-steklo.jpg" },
+              { label: "Барельефы", img: "/craft-barelefy.jpg" },
+              { label: "Керамика", img: "/craft-keramika.jpg" },
+            ].map((craft) => (
+              <div key={craft.label} className="relative flex aspect-square flex-col justify-end overflow-hidden p-6">
+                <Image
+                  src={craft.img}
+                  alt={craft.label}
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-deep/80 via-deep/10 to-transparent" />
+                <span className="relative font-serif-display text-lg text-ink">{craft.label}</span>
               </div>
             ))}
           </div>
@@ -169,7 +183,7 @@ export default function Home() {
           <div className="md:col-span-5">
             <p className="eyebrow">География</p>
             <h2 className="mt-3 font-serif-display text-3xl sm:text-4xl">
-              Студия в Ташкенте — объекты там, где живут наши клиенты
+              Ведём объекты там, где живут наши клиенты
             </h2>
           </div>
           <div className="grid grid-cols-2 gap-6 md:col-span-7 md:grid-cols-4">
@@ -182,18 +196,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* CLIENTS */}
       <section className="section">
         <div className="container-xl">
-          <SectionHeading eyebrow="Отзывы" title="Что говорят клиенты" />
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {testimonials.map((t) => (
-              <figure key={t.project} className="border border-line p-8">
-                <blockquote className="text-base leading-relaxed text-ink/90">
-                  “{t.quote}”
-                </blockquote>
-                <figcaption className="mt-6 text-sm text-stone">{t.project}</figcaption>
-              </figure>
+          <SectionHeading eyebrow="Нам доверяют" title="Клиенты и партнёры" />
+          <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
+            {clients.map((client) => (
+              <span key={client} className="text-sm text-stone">
+                {client}
+              </span>
             ))}
           </div>
         </div>

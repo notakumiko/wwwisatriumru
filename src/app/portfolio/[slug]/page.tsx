@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { projects } from "@/content/projects";
 import { getService } from "@/content/services";
@@ -32,7 +33,6 @@ export default async function ProjectPage({
   const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
 
-  const [from, to] = project.palette;
   const others = projects.filter((p) => p.slug !== project.slug).slice(0, 3);
   const usedServices = project.servicesUsed
     .map((s) => getService(s))
@@ -43,6 +43,7 @@ export default async function ProjectPage({
     "@type": "CreativeWork",
     name: project.title,
     description: project.summary,
+    image: `${studio.url}${project.cover}`,
     creator: { "@type": "Organization", name: studio.fullName, url: studio.url },
     locationCreated: { "@type": "Place", name: project.location },
     dateCreated: project.year,
@@ -70,13 +71,34 @@ export default async function ProjectPage({
         </div>
       </section>
 
-      {/* Галерея-заглушка: заменить на реальные фотографии проекта */}
-      <section
-        className="aspect-[16/9] w-full"
-        style={{ backgroundImage: `linear-gradient(160deg, ${from} 0%, ${to} 100%)` }}
-        role="img"
-        aria-label={`${project.title} — интерьер в стиле ${project.style.toLowerCase()}, ${project.location}`}
-      />
+      <section className="relative aspect-[16/9] w-full">
+        <Image
+          src={project.cover}
+          alt={`${project.title} — интерьер в стиле ${project.style.toLowerCase()}, ${project.location}`}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+      </section>
+
+      {project.gallery.length > 0 && (
+        <section className="border-b border-line bg-surface py-6">
+          <div className="container-xl grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {project.gallery.map((src) => (
+              <div key={src} className="relative aspect-[4/5] overflow-hidden">
+                <Image
+                  src={src}
+                  alt={`${project.title} — деталь интерьера, ${project.location}`}
+                  fill
+                  sizes="(max-width: 640px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-500 hover:scale-[1.04]"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="section">
         <div className="container-xl grid gap-12 md:grid-cols-12">
@@ -94,10 +116,12 @@ export default async function ProjectPage({
                 <dt className="eyebrow">Стиль</dt>
                 <dd className="mt-1 text-base text-ink">{project.style}</dd>
               </div>
-              <div className="border-t border-line pt-4">
-                <dt className="eyebrow">Площадь</dt>
-                <dd className="mt-1 text-base text-ink">{project.area}</dd>
-              </div>
+              {project.area && (
+                <div className="border-t border-line pt-4">
+                  <dt className="eyebrow">Площадь</dt>
+                  <dd className="mt-1 text-base text-ink">{project.area}</dd>
+                </div>
+              )}
               <div className="border-t border-line pt-4">
                 <dt className="eyebrow">Год</dt>
                 <dd className="mt-1 text-base text-ink">{project.year}</dd>
@@ -179,14 +203,15 @@ export default async function ProjectPage({
             <div className="grid gap-8 sm:grid-cols-3">
               {others.map((p) => (
                 <Link key={p.slug} href={`/portfolio/${p.slug}`} className="group block">
-                  <div
-                    className="aspect-[4/5] transition-transform duration-500 group-hover:scale-[1.02]"
-                    style={{
-                      backgroundImage: `linear-gradient(155deg, ${p.palette[0]} 0%, ${p.palette[1]} 100%)`,
-                    }}
-                    role="img"
-                    aria-label={`${p.title} — ${p.location}`}
-                  />
+                  <div className="relative aspect-[4/5] overflow-hidden">
+                    <Image
+                      src={p.cover}
+                      alt={`${p.title} — ${p.location}`}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    />
+                  </div>
                   <h3 className="mt-4 font-serif-display text-lg text-ink">{p.title}</h3>
                   <p className="text-sm text-stone">{p.location}</p>
                 </Link>

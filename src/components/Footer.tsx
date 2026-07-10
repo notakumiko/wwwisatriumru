@@ -18,7 +18,7 @@ export function Footer() {
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-stone">
             {studio.description}
           </p>
-          <p className="mt-6 text-sm text-stone">{studio.city}</p>
+          <p className="mt-6 text-sm text-stone">{studio.geo.join(" · ")}</p>
         </div>
 
         <div>

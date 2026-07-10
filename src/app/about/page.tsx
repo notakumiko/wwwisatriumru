@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { SectionHeading } from "@/components/SectionHeading";
-import { studio, manifestoText, founderNote, highlights } from "@/content/studio";
+import { studio, manifestoText, founderNote, highlights, clients } from "@/content/studio";
 
 export const metadata: Metadata = {
   title: "О студии",
   description:
-    "ATRIUM — студия дизайна интерьеров в Ташкенте. Философия «Прошлое раскрывает будущее»: материалы, фактура и работа с частными мастерами.",
+    "ATRIUM — студия дизайна интерьеров полного цикла. Философия «Прошлое раскрывает будущее»: материалы, фактура и работа с частными мастерами.",
 };
 
 export default function AboutPage() {
@@ -25,7 +26,15 @@ export default function AboutPage() {
         <div className="container-xl grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
             <div className="sticky top-28 flex flex-col gap-8">
-              <div className="aspect-[3/4] texture-plaster" />
+              <div className="relative aspect-[3/4] overflow-hidden">
+                <Image
+                  src={founderNote.photo}
+                  alt={founderNote.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
+                />
+              </div>
               <div className="grid grid-cols-2 gap-6">
                 {highlights.map((item) => (
                   <div key={item.label}>
@@ -50,7 +59,7 @@ export default function AboutPage() {
               <SectionHeading
                 eyebrow="Материалы"
                 title="Фактура как содержание"
-                description="Грубая штукатурка, необработанный бетон, натуральный камень, состаренная латунь и дерево с видимой текстурой — мы не сглаживаем материалы, а строим на их подлинности."
+                description="Натуральный камень, патинированная медь, редкие породы дерева, художественное стекло, тиснёная кожа — материалы, которые стареют с достоинством. Мы не сглаживаем их, а строим на их подлинности."
               />
             </div>
 
@@ -58,7 +67,7 @@ export default function AboutPage() {
               <SectionHeading
                 eyebrow="Ручная работа"
                 title="Партнёрство с мастерами"
-                description="Витражи, стекло, барельефы и керамика создаются частными мастерами, с которыми студия сотрудничает на постоянной основе. Это не декор поверх интерьера, а часть его архитектуры — штучные предметы, которые невозможно повторить."
+                description="Барельефы, авторские панно, скульптуры, витражи, световые инсталляции и уникальная мебель создаются частными мастерами, с которыми студия сотрудничает на постоянной основе. Это не декор поверх интерьера, а часть его архитектуры — штучные предметы, которые невозможно повторить."
               />
             </div>
 
@@ -66,10 +75,11 @@ export default function AboutPage() {
               <SectionHeading eyebrow="Подход" title="Как мы ведём проекты" />
               <ul className="mt-6 flex flex-col gap-4">
                 {[
-                  "Полный цикл работ — от концепции до реализации — без передачи проекта между разными подрядчиками.",
+                  "Полный цикл работ — от аудита и проектирования до комплектации и реализации под ключ.",
                   "Интерьер как фон для жизни: мы начинаем с того, как заказчик проживает пространство, а не с референсов.",
-                  "Цельность важнее эффектности — решения выверены, без случайных декоративных жестов.",
-                  "Проекты в разных городах и странах — опыт ведения объектов в Ташкенте, Испании и в России одновременно.",
+                  "Глубина вместо широты — ограниченное количество проектов и максимум внимания каждому клиенту.",
+                  "Партнёрство, не подряд — становимся частью вашей истории, ваши цели становятся нашими.",
+                  "Масштаб и география — от частных резиденций до парк-отелей и ресторанных сетей в Москве, Санкт-Петербурге, Сочи, Ташкенте и Аликанте.",
                 ].map((text) => (
                   <li key={text} className="flex gap-4 border-t border-line pt-4 text-sm leading-relaxed text-stone">
                     {text}
@@ -81,6 +91,17 @@ export default function AboutPage() {
             <div className="mt-16 border-t border-line pt-12">
               <p className="eyebrow mb-4">Основатель</p>
               <p className="text-base leading-relaxed text-stone">{founderNote.text}</p>
+            </div>
+
+            <div className="mt-16 border-t border-line pt-12">
+              <p className="eyebrow mb-6">Нам доверяют</p>
+              <div className="flex flex-wrap gap-x-6 gap-y-3">
+                {clients.map((client) => (
+                  <span key={client} className="text-sm text-stone">
+                    {client}
+                  </span>
+                ))}
+              </div>
             </div>
 
             <div className="mt-16 flex flex-wrap gap-4 border-t border-line pt-12">
