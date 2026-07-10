@@ -41,7 +41,7 @@ export const projects: Project[] = [
       "Макассар и редкие породы дерева",
       "Мрамор и оникс",
     ],
-    servicesUsed: ["dizayn-proekt", "komplektatsiya", "realizatsiya", "art-obekty"],
+    servicesUsed: ["dizayn-proekt", "komplektatsiya", "realizatsiya", "handmade"],
     cover: "/portfolio/rezidentsiya-spb-1.jpg",
     gallery: [
       "/portfolio/rezidentsiya-spb-2.jpg",
@@ -100,7 +100,7 @@ export const projects: Project[] = [
       "Бархат в мебели",
       "Молдинги и лепной декор",
     ],
-    servicesUsed: ["dizayn-proekt", "komplektatsiya", "art-obekty"],
+    servicesUsed: ["dizayn-proekt", "komplektatsiya", "handmade"],
     cover: "/portfolio/kvartira-spb-1.jpg",
     gallery: [
       "/portfolio/kvartira-spb-2.jpg",
@@ -130,7 +130,7 @@ export const projects: Project[] = [
       "Классические каминные порталы",
       "Живая зелень в интерьере",
     ],
-    servicesUsed: ["dizayn-proekt", "realizatsiya", "art-obekty"],
+    servicesUsed: ["dizayn-proekt", "realizatsiya", "handmade"],
     cover: "/portfolio/dom-basseyn-1.jpg",
     gallery: ["/portfolio/dom-basseyn-2.jpg", "/portfolio/dom-basseyn-3.jpg"],
   },

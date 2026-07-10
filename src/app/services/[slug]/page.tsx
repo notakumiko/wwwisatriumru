@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { PortfolioTile } from "@/components/PortfolioTile";
 import { services, getService } from "@/content/services";
@@ -134,15 +135,51 @@ export default async function ServicePage({
               </ul>
             </div>
 
+            {service.techniques && (
+              <div className="mt-10 border-t border-line pt-8">
+                <p className="eyebrow mb-6">Техники</p>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {service.techniques.map((tech) => (
+                    <div key={tech.title}>
+                      <div className="relative aspect-square overflow-hidden">
+                        <Image
+                          src={tech.img}
+                          alt={tech.title}
+                          fill
+                          sizes="(max-width: 640px) 50vw, 33vw"
+                          className="object-cover"
+                        />
+                      </div>
+                      <h3 className="mt-3 text-base font-medium text-ink">{tech.title}</h3>
+                      <p className="mt-1 text-sm leading-relaxed text-stone">{tech.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {service.steps && (
               <div className="mt-10 border-t border-line pt-8">
                 <p className="eyebrow mb-6">Этапы</p>
-                <div className="grid gap-6 sm:grid-cols-2">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {service.steps.map((step, i) => (
-                    <div key={step.title} className="border-t border-line pt-4">
-                      <div className="text-xs text-accent-light">Этап {i + 1}</div>
-                      <h3 className="mt-1 text-base font-medium text-ink">{step.title}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-stone">{step.description}</p>
+                    <div key={step.title}>
+                      {step.img && (
+                        <div className="relative mb-3 aspect-[4/3] overflow-hidden">
+                          <Image
+                            src={step.img}
+                            alt={step.title}
+                            fill
+                            sizes="(max-width: 640px) 50vw, 33vw"
+                            className="object-cover"
+                          />
+                        </div>
+                      )}
+                      <div className="border-t border-line pt-4">
+                        <div className="text-xs text-accent-light">Этап {i + 1}</div>
+                        <h3 className="mt-1 text-base font-medium text-ink">{step.title}</h3>
+                        <p className="mt-2 text-sm leading-relaxed text-stone">{step.description}</p>
+                      </div>
                     </div>
                   ))}
                 </div>

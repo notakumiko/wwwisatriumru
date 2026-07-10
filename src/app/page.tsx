@@ -3,6 +3,7 @@ import Image from "next/image";
 import { SectionHeading } from "@/components/SectionHeading";
 import { PortfolioTile } from "@/components/PortfolioTile";
 import { MiniLeadForm } from "@/components/MiniLeadForm";
+import { HeroIntro } from "@/components/HeroIntro";
 import { studio, manifestoText, highlights, clients } from "@/content/studio";
 import { services } from "@/content/services";
 import { projects } from "@/content/projects";
@@ -32,21 +33,12 @@ export default function Home() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-deep via-deep/50 to-deep/10" />
         <div className="container-xl relative w-full pb-20 pt-32 md:pb-28">
-          <p className="eyebrow mb-8">{studio.fullName} · {studio.geo.join(" · ")}</p>
-          <h1 className="font-serif-display max-w-4xl text-5xl leading-[1.05] text-ink sm:text-6xl md:text-7xl">
-            {manifestoText.title}
-          </h1>
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-stone">
-            {studio.tagline}
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link href="/portfolio" className="btn-primary">
-              Смотреть проекты
-            </Link>
-            <a href={studio.contacts.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-secondary">
-              Обсудить проект
-            </a>
-          </div>
+          <HeroIntro
+            eyebrow={`${studio.fullName} · ${studio.geo.join(" · ")}`}
+            title={manifestoText.title}
+            subtitle={studio.tagline}
+            whatsappHref={studio.contacts.whatsapp}
+          />
         </div>
       </section>
 
@@ -103,10 +95,10 @@ export default function Home() {
         <div className="container-xl">
           <SectionHeading
             eyebrow="Услуги"
-            title="Пять направлений, один результат"
-            description="Полный цикл создания интерьера — от дизайн-проекта до готового помещения. Берите весь цикл или отдельные этапы."
+            title="Шесть направлений, один результат"
+            description="Полный цикл создания интерьера — от дизайн-проекта до готового помещения, включая авторские техники и подбор искусства. Берите весь цикл или отдельные этапы."
           />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((service) => (
               <Link
                 key={service.slug}
@@ -125,25 +117,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CRAFT SECTION */}
+      {/* CRAFT SECTION — авторские техники студии */}
       <section className="section border-y border-line bg-surface">
         <div className="container-xl grid gap-12 md:grid-cols-12 md:items-center">
           <div className="md:col-span-5">
             <SectionHeading
-              eyebrow="Ручная работа"
+              eyebrow="Авторские техники"
               title="Материалы, которые нельзя скопировать"
-              description="Витражи, стекло, барельефы и керамика создаются частными мастерами и становятся частью архитектуры пространства — а не декором поверх неё."
+              description="Барельефы, керамика, чеканка, витражи и художественное литьё/фьюзинг стекла — техники, которыми студия занимается лично, а не только заказывает у подрядчиков. Образцы можно увидеть в шоу-руме студии."
             />
-            <Link href="/services/art-obekty" className="btn-secondary mt-8 inline-flex">
-              Арт-объекты на заказ
+            <Link href="/services/handmade" className="btn-secondary mt-8 inline-flex">
+              Авторские предметы на заказ
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-4 md:col-span-7">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:col-span-7">
             {[
               { label: "Витражи", img: "/craft-vitrazhi.jpg" },
-              { label: "Стекло ручной работы", img: "/craft-steklo.jpg" },
+              { label: "Литьё и фьюзинг стекла", img: "/craft-steklo.jpg" },
               { label: "Барельефы", img: "/craft-barelefy.jpg" },
               { label: "Керамика", img: "/craft-keramika.jpg" },
+              { label: "Чеканка", img: "/craft-chekanka.jpg" },
             ].map((craft) => (
               <div key={craft.label} className="relative flex aspect-square flex-col justify-end overflow-hidden p-6">
                 <Image
@@ -157,6 +150,31 @@ export default function Home() {
                 <span className="relative font-serif-display text-lg text-ink">{craft.label}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ИСКУССТВО — скульптура и живопись, отдельно от авторских техник */}
+      <section className="section">
+        <div className="container-xl grid gap-12 md:grid-cols-12 md:items-center">
+          <div className="relative order-2 aspect-[4/5] overflow-hidden md:order-1 md:col-span-6">
+            <Image
+              src="/craft-art.jpg"
+              alt="Скульптура в интерьере"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="order-1 md:order-2 md:col-span-6">
+            <SectionHeading
+              eyebrow="Искусство"
+              title="Скульптура и живопись для интерьера"
+              description="Санкт-Петербург сейчас переживает всплеск интереса к современному искусству — и студия участвует в этом напрямую: подбираем и поставляем работы художников, курируем собственную коллекцию, помогаем собрать акцент для дома или офиса."
+            />
+            <Link href="/services/art" className="btn-secondary mt-8 inline-flex">
+              Подбор искусства
+            </Link>
           </div>
         </div>
       </section>

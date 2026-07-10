@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
 import { PortfolioTile } from "@/components/PortfolioTile";
 import { objectTypes, projects } from "@/content/projects";
 import { services } from "@/content/services";
@@ -74,8 +75,16 @@ export function PortfolioGrid() {
 
       {filtered.length > 0 ? (
         <div className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((project) => (
-            <PortfolioTile key={project.slug} project={project} />
+          {filtered.map((project, i) => (
+            <motion.div
+              key={project.slug}
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0 }}
+              transition={{ duration: 0.5, delay: (i % 3) * 0.12, ease: "easeOut" }}
+            >
+              <PortfolioTile project={project} />
+            </motion.div>
           ))}
         </div>
       ) : (

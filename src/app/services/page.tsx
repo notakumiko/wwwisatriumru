@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeading } from "@/components/SectionHeading";
 import { services, comparisonRows } from "@/content/services";
-import { studio } from "@/content/studio";
+import { studio, gallery } from "@/content/studio";
 
 export const metadata: Metadata = {
   title: "Услуги студии дизайна интерьеров",
   description:
-    "Полный цикл создания интерьера: дизайн-проект, комплектация, реализация, декорирование, изготовление арт-объектов на заказ. Студия ATRIUM.",
+    "Полный цикл создания интерьера: дизайн-проект, комплектация, реализация, декорирование, авторские техники (барельефы, керамика, витражи, чеканка, стекло) и подбор искусства. Студия ATRIUM.",
 };
 
 export default function ServicesPage() {
@@ -20,9 +20,10 @@ export default function ServicesPage() {
             Полный цикл создания интерьера
           </h1>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-stone">
-            Пять направлений, которые складываются в один результат — готовое
-            пространство. Берите весь цикл или отдельные этапы, в зависимости
-            от стадии вашего объекта.
+            Шесть направлений, которые складываются в один результат — готовое
+            пространство, наполненное авторскими предметами и искусством.
+            Берите весь цикл или отдельные этапы, в зависимости от стадии
+            вашего объекта.
           </p>
         </div>
       </section>
@@ -49,15 +50,34 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      <section className="section border-t border-line bg-deep">
+        <div className="container-xl grid gap-10 md:grid-cols-2 md:items-center">
+          <div>
+            <p className="eyebrow mb-4">{gallery.eyebrow}</p>
+            <h2 className="font-serif-display text-3xl leading-tight text-ink sm:text-4xl">
+              Посетите шоу-рум студии
+            </h2>
+            <p className="mt-4 max-w-md text-base leading-relaxed text-stone">
+              {gallery.description}
+            </p>
+          </div>
+          <div className="flex md:justify-end">
+            <Link href="/gallery" className="btn-primary">
+              Смотреть галерею
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="section border-t border-line bg-surface">
         <div className="container-xl">
           <SectionHeading
             eyebrow="Сравнение"
             title="Что входит в каждую услугу"
-            description="Наглядно — для тех, кто не готов читать пять страниц. Любые услуги можно сочетать."
+            description="Наглядно — для тех, кто не готов читать шесть страниц. Любые услуги можно сочетать."
           />
           <div className="mt-12 overflow-x-auto">
-            <table className="w-full min-w-[760px] border-collapse text-sm">
+            <table className="w-full min-w-[960px] border-collapse text-sm">
               <thead>
                 <tr>
                   <th className="border-b border-line py-4 pr-4 text-left font-normal text-stone">
