@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
-import { studio } from "@/content/studio";
+import { studio, presentations } from "@/content/studio";
 
 export const metadata: Metadata = {
   title: "Контакты",
@@ -54,6 +54,20 @@ export default function ContactPage() {
 
           <div className="mt-8 border-t border-line pt-8 text-sm text-stone">
             <p>{studio.address}</p>
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3 border-t border-line pt-8 text-sm">
+            <p className="text-stone">Презентация студии для клиентов:</p>
+            {presentations.map((item) => (
+              <a
+                key={item.file}
+                href={item.file}
+                download
+                className="text-ink hover:text-accent-light"
+              >
+                Скачать «{item.title}» · PDF, {item.sizeLabel}
+              </a>
+            ))}
           </div>
         </div>
 
