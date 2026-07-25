@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { projects } from "@/content/projects";
 import { getService } from "@/content/services";
 import { studio } from "@/content/studio";
+import { ProjectGallery } from "@/components/ProjectGallery";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -84,19 +85,10 @@ export default async function ProjectPage({
 
       {project.gallery.length > 0 && (
         <section className="border-b border-line bg-surface py-6">
-          <div className="container-xl grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {project.gallery.map((src) => (
-              <div key={src} className="relative aspect-[4/5] overflow-hidden">
-                <Image
-                  src={src}
-                  alt={`${project.title} — деталь интерьера, ${project.location}`}
-                  fill
-                  sizes="(max-width: 640px) 50vw, 25vw"
-                  className="object-cover transition-transform duration-500 hover:scale-[1.04]"
-                />
-              </div>
-            ))}
-          </div>
+          <ProjectGallery
+            images={project.gallery}
+            alt={`${project.title} — деталь интерьера, ${project.location}`}
+          />
         </section>
       )}
 

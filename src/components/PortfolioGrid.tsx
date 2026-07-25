@@ -74,16 +74,17 @@ export function PortfolioGrid() {
       </div>
 
       {filtered.length > 0 ? (
-        <div className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 columns-1 gap-8 sm:columns-2 lg:columns-3">
           {filtered.map((project, i) => (
             <motion.div
               key={project.slug}
+              className="mb-8 break-inside-avoid"
               initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0 }}
               transition={{ duration: 0.5, delay: (i % 3) * 0.12, ease: "easeOut" }}
             >
-              <PortfolioTile project={project} />
+              <PortfolioTile project={project} index={i} />
             </motion.div>
           ))}
         </div>
