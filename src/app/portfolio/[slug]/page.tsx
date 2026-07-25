@@ -39,17 +39,33 @@ export default async function ProjectPage({
     .map((s) => getService(s))
     .filter((s): s is NonNullable<typeof s> => Boolean(s));
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    name: project.title,
-    description: project.summary,
-    image: `${studio.url}${project.cover}`,
-    creator: { "@type": "Organization", name: studio.fullName, url: studio.url },
-    locationCreated: { "@type": "Place", name: project.location },
-    dateCreated: project.year,
-    url: `${studio.url}/portfolio/${project.slug}`,
-  };
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      name: project.title,
+      description: project.summary,
+      image: `${studio.url}${project.cover}`,
+      creator: { "@type": "Organization", name: studio.fullName, url: studio.url },
+      locationCreated: { "@type": "Place", name: project.location },
+      dateCreated: project.year,
+      url: `${studio.url}/portfolio/${project.slug}`,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Главная", item: studio.url },
+        { "@type": "ListItem", position: 2, name: "Портфолио", item: `${studio.url}/portfolio` },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: project.title,
+          item: `${studio.url}/portfolio/${project.slug}`,
+        },
+      ],
+    },
+  ];
 
   return (
     <>

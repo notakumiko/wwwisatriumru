@@ -64,6 +64,20 @@ export default async function ServicePage({
         acceptedAnswer: { "@type": "Answer", text: item.a },
       })),
     },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Главная", item: studio.url },
+        { "@type": "ListItem", position: 2, name: "Услуги", item: `${studio.url}/services` },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: service.title,
+          item: `${studio.url}/services/${service.slug}`,
+        },
+      ],
+    },
   ];
 
   return (
