@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { PortfolioTile } from "@/components/PortfolioTile";
-import { objectTypes, projects } from "@/content/projects";
+import { CategoryGrid } from "@/components/CategoryGrid";
+import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
+import { objectTypes, projects, getCategory, type ProjectCategorySlug } from "@/content/projects";
 import { services } from "@/content/services";
 
 const ALL_SERVICES = "Все услуги";
@@ -12,6 +15,8 @@ const ALL_SERVICES = "Все услуги";
 export function PortfolioGrid() {
   const searchParams = useSearchParams();
   const preselected = services.find((s) => s.slug === searchParams.get("usluga"));
+  const categorySlug = searchParams.get("category") as ProjectCategorySlug | null;
+  const category = categorySlug ? getCategory(categorySlug) : undefined;
 
   const [activeType, setActiveType] =
     useState<(typeof objectTypes)[number]>("Все объекты");
@@ -19,16 +24,61 @@ export function PortfolioGrid() {
     preselected ? preselected.slug : ALL_SERVICES
   );
 
+  if (!category) {
+    return (
+      <div>
+        <p className="eyebrow mb-2">Портфолио</p>
+        <h1 className="font-serif-display text-3xl text-ink sm:text-4xl">
+          Проекты по категориям
+        </h1>
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-stone">
+          Каждая категория — это папка с обложкой: внутри проекты студии по
+          этому направлению, у каждого своя галерея снимков.
+        </p>
+
+        <div className="mt-12">
+          <p className="eyebrow mb-4">До / после</p>
+          {/* PLACEHOLDER: заменить на реальную пару "до/после" одного ракурса, когда появятся фото клиента */}
+          <BeforeAfterSlider
+            before={{
+              src: "/portfolio/_placeholder/ph-restaurant-nook.jpg",
+              alt: "Помещение до реализации проекта",
+              label: "До",
+            }}
+            after={{
+              src: "/portfolio/rezidentsiya-art-deco-spb/cover.jpg",
+              alt: "Интерьер после реализации проекта",
+              label: "После",
+            }}
+          />
+          <p className="mt-3 text-xs text-stone">
+            Потяните за ползунок, чтобы сравнить помещение до и после работы студии.
+          </p>
+        </div>
+
+        <CategoryGrid />
+      </div>
+    );
+  }
+
   const filtered = projects.filter((p) => {
+    const categoryOk = p.category === category.slug;
     const typeOk = activeType === "Все объекты" || p.objectType === activeType;
     const serviceOk =
       activeService === ALL_SERVICES || p.servicesUsed.includes(activeService);
-    return typeOk && serviceOk;
+    return categoryOk && typeOk && serviceOk;
   });
 
   return (
     <div>
-      <div className="flex flex-col gap-4">
+      <Link href="/portfolio" scroll={false} className="text-sm text-stone hover:text-accent-light">
+        ← Все категории
+      </Link>
+      <p className="eyebrow mb-2 mt-6">Портфолио</p>
+      <h1 className="font-serif-display text-3xl text-ink sm:text-4xl">{category.title}</h1>
+      <p className="mt-4 max-w-2xl text-base leading-relaxed text-stone">{category.description}</p>
+
+      <div className="mt-10 flex flex-col gap-4">
         <div className="flex flex-wrap items-center gap-3">
           <span className="w-24 text-xs uppercase tracking-[0.2em] text-stone">Тип</span>
           {objectTypes.map((type) => (

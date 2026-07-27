@@ -51,6 +51,13 @@ export async function GET() {
     lines.push("");
   }
 
+  lines.push("## Дополнительно");
+  lines.push("");
+  lines.push(`- [Калькулятор стоимости](${studio.url}/calculator): расчёт по типу объекта, площади, стилю и срокам.`);
+  lines.push(`- [Арт-материалы](${studio.url}/art-materialy): авторские техники и материалы студии.`);
+  lines.push(`- [Представительство](${studio.url}/predstavitelstvo): партнёры-поставщики студии.`);
+  lines.push("");
+
   lines.push("## Контакты");
   lines.push("");
   lines.push(`- Email: ${studio.contacts.email}`);

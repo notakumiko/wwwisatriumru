@@ -32,6 +32,11 @@ export function PortfolioTile({ project, index = 0 }: { project: Project; index?
           className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-deep/70 via-transparent to-deep/30" />
+        {project.comingSoon && (
+          <span className="absolute right-3 top-3 border border-line bg-deep/80 px-2 py-1 text-[9px] uppercase tracking-[0.15em] text-stone">
+            Фото уточняются
+          </span>
+        )}
         <div className="absolute inset-0 flex flex-col justify-between p-6">
           <div className="flex items-start justify-between">
             <span className="eyebrow bg-deep/70 px-2 py-1 text-[10px]">

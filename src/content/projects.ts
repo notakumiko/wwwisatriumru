@@ -1,11 +1,70 @@
+export type ProjectCategorySlug =
+  | "restorany"
+  | "ofisy"
+  | "mop-kompleksy"
+  | "chastnye-doma"
+  | "kvartiry"
+  | "dekor"
+  | "avtorskie-kontseptsii";
+
+export const projectCategories: {
+  slug: ProjectCategorySlug;
+  title: string;
+  description: string;
+}[] = [
+  {
+    slug: "restorany",
+    title: "Рестораны",
+    description: "Фасады, залы и террасы заведений — от бара у парка до курортного ресторанного комплекса.",
+  },
+  {
+    slug: "ofisy",
+    title: "Офисы",
+    description: "Штаб-квартиры и кабинеты руководителей — пространство как аргумент работодателя.",
+  },
+  {
+    slug: "mop-kompleksy",
+    title: "МОП и коммерческие комплексы",
+    description: "Лобби, общественные зоны и торговые пространства крупных объектов.",
+  },
+  {
+    slug: "chastnye-doma",
+    title: "Частные дома",
+    description: "Загородные резиденции — от классики до курортного модернизма.",
+  },
+  {
+    slug: "kvartiry",
+    title: "Квартиры",
+    description: "Городские квартиры и студии — камерные объекты студии.",
+  },
+  {
+    slug: "dekor",
+    title: "Декор",
+    description: "Проекты, где акцент — на стайлинге и предметном слое, а не на перепланировке.",
+  },
+  {
+    slug: "avtorskie-kontseptsii",
+    title: "Авторские концепции",
+    description: "Эскизы и идеи студии, ещё не воплощённые в конкретном объекте.",
+  },
+];
+
+export function getCategory(slug: ProjectCategorySlug) {
+  return projectCategories.find((c) => c.slug === slug);
+}
+
 export type Project = {
   slug: string;
   title: string;
   location: string;
-  objectType: "Квартира" | "Дом" | "Коммерция";
+  objectType: "Квартира" | "Дом" | "Коммерция" | "Концепт";
+  category: ProjectCategorySlug;
   style: string;
   area?: string;
   year: string;
+  // true — карточка-заглушка: имя и категория подтверждены студией,
+  // фото и описание временные, ждут материалов (второй заход).
+  comingSoon?: boolean;
   summary: string;
   task: string;
   solution: string[];
@@ -16,15 +75,76 @@ export type Project = {
   quote?: { text: string; author: string };
 };
 
+function stub(overrides: {
+  slug: string;
+  title: string;
+  location: string;
+  objectType: Project["objectType"];
+  category: ProjectCategorySlug;
+  year: string;
+  servicesUsed: string[];
+  cover: string;
+  gallery: string[];
+  subject: string; // "Ресторан" | "Дом" | "Квартира" | "Офис" и т.п. — для честного summary
+}): Project {
+  return {
+    slug: overrides.slug,
+    title: overrides.title,
+    location: overrides.location,
+    objectType: overrides.objectType,
+    category: overrides.category,
+    style: "Материалы уточняются",
+    year: overrides.year,
+    comingSoon: true,
+    summary: `${overrides.subject} уже в портфолио студии — полное описание и реальные фотографии добавим, когда получим материалы от студии.`,
+    task: "Кейс уточняется — карточка зарезервирована в структуре портфолио.",
+    solution: [
+      "Полное описание проекта, ход работы и фотографии появятся здесь после загрузки материалов студии.",
+    ],
+    materials: ["Уточняется"],
+    servicesUsed: overrides.servicesUsed,
+    cover: overrides.cover,
+    gallery: overrides.gallery,
+  };
+}
+
+const ph = (name: string) => `/portfolio/_placeholder/${name}`;
+const PLACEHOLDER_POOL = [
+  ph("ph-bathroom-marble.jpg"),
+  ph("ph-bathroom-glass.jpg"),
+  ph("ph-bathroom-vanity.jpg"),
+  ph("ph-restaurant-arch.jpg"),
+  ph("ph-restaurant-shelf.jpg"),
+  ph("ph-restaurant-nook.jpg"),
+  ph("ph-conservatory.jpg"),
+  ph("ph-pendant-lights.jpg"),
+  ph("ph-relief-panel-silver.jpg"),
+  ph("ph-relief-panel-gold.jpg"),
+];
+// PLACEHOLDER: все проекты ниже используют временные фото из архива студии
+// (реальные интерьеры, но не привязанные к конкретному названному объекту).
+// Заменить на фото клиента по каждому проекту во втором заходе.
+function poolCover(i: number) {
+  return PLACEHOLDER_POOL[i % PLACEHOLDER_POOL.length];
+}
+function poolGallery(i: number) {
+  return [
+    PLACEHOLDER_POOL[(i + 1) % PLACEHOLDER_POOL.length],
+    PLACEHOLDER_POOL[(i + 2) % PLACEHOLDER_POOL.length],
+  ];
+}
+
 // Реальные проекты студии из портфолио (фото — из архива портфолио ATRIUM, 2026).
 // Названия и годы части объектов — временные: точные даты и подписи
 // уточняются вторым заходом вместе с полным «сырым» архивом работ студии.
 export const projects: Project[] = [
+  // ---------- РЕАЛЬНЫЕ ФОТО ----------
   {
     slug: "rezidentsiya-art-deco-spb",
     title: "Резиденция в стиле ар-деко",
     location: "Санкт-Петербург",
     objectType: "Дом",
+    category: "chastnye-doma",
     style: "Ар-деко с авторскими барельефами",
     year: "2024",
     summary:
@@ -62,10 +182,11 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "dom-s-basseynom-sochi",
-    title: "Дом с бассейном",
+    slug: "ahun-sochi",
+    title: "Ахун",
     location: "Сочи",
     objectType: "Дом",
+    category: "chastnye-doma",
     style: "Современная курортная классика",
     year: "2025",
     summary:
@@ -85,21 +206,21 @@ export const projects: Project[] = [
       "Латунь и стекло в свете",
     ],
     servicesUsed: ["dizayn-proekt", "komplektatsiya", "realizatsiya", "handmade"],
-    cover: "/portfolio/dom-s-basseynom-sochi/cover.jpg",
+    cover: "/portfolio/ahun-sochi/cover.jpg",
     gallery: [
-      "/portfolio/dom-s-basseynom-sochi/01.jpg",
-      "/portfolio/dom-s-basseynom-sochi/02.jpg",
-      "/portfolio/dom-s-basseynom-sochi/03.jpg",
-      "/portfolio/dom-s-basseynom-sochi/04.jpg",
-      "/portfolio/dom-s-basseynom-sochi/05.jpg",
-      "/portfolio/dom-s-basseynom-sochi/06.jpg",
-      "/portfolio/dom-s-basseynom-sochi/07.jpg",
-      "/portfolio/dom-s-basseynom-sochi/08.jpg",
-      "/portfolio/dom-s-basseynom-sochi/09.jpg",
-      "/portfolio/dom-s-basseynom-sochi/10.jpg",
-      "/portfolio/dom-s-basseynom-sochi/11.jpg",
-      "/portfolio/dom-s-basseynom-sochi/12.jpg",
-      "/portfolio/dom-s-basseynom-sochi/13.jpg",
+      "/portfolio/ahun-sochi/01.jpg",
+      "/portfolio/ahun-sochi/02.jpg",
+      "/portfolio/ahun-sochi/03.jpg",
+      "/portfolio/ahun-sochi/04.jpg",
+      "/portfolio/ahun-sochi/05.jpg",
+      "/portfolio/ahun-sochi/06.jpg",
+      "/portfolio/ahun-sochi/07.jpg",
+      "/portfolio/ahun-sochi/08.jpg",
+      "/portfolio/ahun-sochi/09.jpg",
+      "/portfolio/ahun-sochi/10.jpg",
+      "/portfolio/ahun-sochi/11.jpg",
+      "/portfolio/ahun-sochi/12.jpg",
+      "/portfolio/ahun-sochi/13.jpg",
     ],
   },
   {
@@ -107,6 +228,7 @@ export const projects: Project[] = [
     title: "Квартира в Аликанте",
     location: "Аликанте, Испания",
     objectType: "Квартира",
+    category: "kvartiry",
     style: "Средиземноморский минимализм",
     year: "2023",
     summary:
@@ -131,6 +253,7 @@ export const projects: Project[] = [
     title: "Ресторан «Аристарх Периньон»",
     location: "Санкт-Петербург",
     objectType: "Коммерция",
+    category: "restorany",
     style: "Тёплый эклектизм: лофт, зелень, винная классика",
     year: "2024",
     summary:
@@ -165,9 +288,10 @@ export const projects: Project[] = [
   },
   {
     slug: "bar-bolshaya-ryba-krasnodar",
-    title: "Бар «Большая Рыба»",
+    title: "Бар «Большая Рыба» у парка Галицкого",
     location: "Краснодар",
     objectType: "Коммерция",
+    category: "restorany",
     style: "Индустриальный характер, узнаваемый фасад",
     year: "2023",
     summary:
@@ -203,6 +327,7 @@ export const projects: Project[] = [
     title: "Йога-центр Shakti",
     location: "Бенидорм, Испания",
     objectType: "Коммерция",
+    category: "restorany",
     style: "Средиземноморская этника",
     year: "2023",
     summary:
@@ -234,6 +359,7 @@ export const projects: Project[] = [
     title: "Офис GT Group",
     location: "Москва",
     objectType: "Коммерция",
+    category: "ofisy",
     style: "Деловой минимализм с тёплым деревом",
     year: "2024",
     summary:
@@ -271,9 +397,10 @@ export const projects: Project[] = [
   },
   {
     slug: "ofis-polymetal-spb",
-    title: "Офис и конференц-зал «Полиметалл»",
+    title: "«Полиметалл»: офис и конференц-зал",
     location: "Санкт-Петербург",
     objectType: "Коммерция",
+    category: "mop-kompleksy",
     style: "Репрезентативный корпоративный минимализм",
     year: "2022",
     summary:
@@ -301,6 +428,269 @@ export const projects: Project[] = [
       "/portfolio/ofis-polymetal-spb/05.jpg",
     ],
   },
+  {
+    slug: "galereya-tc-spb",
+    title: "ТЦ «Галерея»",
+    location: "Санкт-Петербург",
+    objectType: "Коммерция",
+    category: "mop-kompleksy",
+    style: "Общественное пространство торгового комплекса",
+    year: "2022",
+    summary:
+      "Общественные зоны торгового центра «Галерея»: светлый атриум с колоннами и озеленением, навигация и зоны отдыха для посетителей.",
+    task:
+      "Сделать места общего пользования крупного торгового комплекса приятными для долгого пребывания — не просто транзитным коридором между магазинами.",
+    solution: [
+      "Атриум решён светлым и просторным — колонны, зелень и мягкий рассеянный свет снимают ощущение «торгового конвейера».",
+      "Зоны отдыха встроены прямо в общий поток движения — посетитель не ищет их специально.",
+    ],
+    materials: ["Светлый камень и керамогранит", "Озеленение атриума", "Металл в отделке колонн"],
+    servicesUsed: ["dizayn-proekt", "realizatsiya"],
+    cover: "/portfolio/galereya-tc-spb/cover.jpg",
+    gallery: ["/portfolio/galereya-tc-spb/01.jpg"],
+  },
+
+  // ---------- РЕСТОРАНЫ (заглушки) ----------
+  stub({
+    slug: "restoran-yusi",
+    title: "Ресторан + фасад ЮСИ",
+    location: "Санкт-Петербург",
+    objectType: "Коммерция",
+    category: "restorany",
+    year: "2024",
+    servicesUsed: ["dizayn-proekt", "realizatsiya"],
+    subject: "Ресторан",
+    cover: poolCover(0),
+    gallery: poolGallery(0),
+  }),
+  stub({
+    slug: "restoran-sloy",
+    title: "«Слой»",
+    location: "Санкт-Петербург",
+    objectType: "Коммерция",
+    category: "restorany",
+    year: "2023",
+    servicesUsed: ["dizayn-proekt", "dekorirovanie"],
+    subject: "Ресторан",
+    cover: poolCover(1),
+    gallery: poolGallery(1),
+  }),
+  stub({
+    slug: "park-otel-optina-pustyn",
+    title: "Парк-отель «Оптина Пустынь»",
+    location: "Калужская область",
+    objectType: "Коммерция",
+    category: "restorany",
+    year: "2022",
+    servicesUsed: ["dizayn-proekt", "komplektatsiya", "realizatsiya"],
+    subject: "Парк-отель",
+    cover: poolCover(2),
+    gallery: poolGallery(2),
+  }),
+
+  // ---------- ОФИСЫ (заглушки) ----------
+  stub({
+    slug: "ofis-gazprom",
+    title: "Офис «Газпром»",
+    location: "Санкт-Петербург",
+    objectType: "Коммерция",
+    category: "ofisy",
+    year: "2023",
+    servicesUsed: ["dizayn-proekt", "realizatsiya"],
+    subject: "Офис",
+    cover: poolCover(3),
+    gallery: poolGallery(3),
+  }),
+  stub({
+    slug: "ofis-kupriyanova",
+    title: "Офис Куприянова",
+    location: "Санкт-Петербург",
+    objectType: "Коммерция",
+    category: "ofisy",
+    year: "2024",
+    servicesUsed: ["dizayn-proekt", "komplektatsiya"],
+    subject: "Офис",
+    cover: poolCover(4),
+    gallery: poolGallery(4),
+  }),
+  stub({
+    slug: "ofis-mihaila",
+    title: "Офис Михаила",
+    location: "Санкт-Петербург",
+    objectType: "Коммерция",
+    category: "ofisy",
+    year: "2025",
+    servicesUsed: ["dizayn-proekt", "komplektatsiya"],
+    subject: "Офис",
+    cover: poolCover(5),
+    gallery: poolGallery(5),
+  }),
+
+  // ---------- МОП И КОММЕРЧЕСКИЕ КОМПЛЕКСЫ (заглушки) ----------
+  stub({
+    slug: "glavstroy",
+    title: "«Главстрой»",
+    location: "Санкт-Петербург",
+    objectType: "Коммерция",
+    category: "mop-kompleksy",
+    year: "2023",
+    servicesUsed: ["dizayn-proekt", "realizatsiya"],
+    subject: "Комплекс",
+    cover: poolCover(6),
+    gallery: poolGallery(6),
+  }),
+  stub({
+    slug: "zum",
+    title: "«Зум»",
+    location: "Санкт-Петербург",
+    objectType: "Коммерция",
+    category: "mop-kompleksy",
+    year: "2024",
+    servicesUsed: ["dizayn-proekt", "realizatsiya"],
+    subject: "Комплекс",
+    cover: poolCover(7),
+    gallery: poolGallery(7),
+  }),
+  stub({
+    slug: "fasad-zapesotskiy",
+    title: "Фасад «Запесоцкий»",
+    location: "Санкт-Петербург",
+    objectType: "Коммерция",
+    category: "mop-kompleksy",
+    year: "2023",
+    servicesUsed: ["dizayn-proekt"],
+    subject: "Фасад",
+    cover: poolCover(8),
+    gallery: poolGallery(8),
+  }),
+
+  // ---------- ЧАСТНЫЕ ДОМА (заглушки) ----------
+  stub({
+    slug: "cherny-dom",
+    title: "Чёрный дом",
+    location: "Краснодар",
+    objectType: "Дом",
+    category: "chastnye-doma",
+    year: "2024",
+    servicesUsed: ["dizayn-proekt", "komplektatsiya", "realizatsiya"],
+    subject: "Дом",
+    cover: poolCover(9),
+    gallery: poolGallery(9),
+  }),
+  stub({
+    slug: "vabi-sabi",
+    title: "Ваби-саби",
+    location: "Санкт-Петербург",
+    objectType: "Дом",
+    category: "chastnye-doma",
+    year: "2025",
+    servicesUsed: ["dizayn-proekt", "komplektatsiya"],
+    subject: "Дом",
+    cover: poolCover(0),
+    gallery: poolGallery(3),
+  }),
+  stub({
+    slug: "dimon",
+    title: "«Димон»",
+    location: "Санкт-Петербург",
+    objectType: "Дом",
+    category: "chastnye-doma",
+    year: "2023",
+    servicesUsed: ["dizayn-proekt", "realizatsiya"],
+    subject: "Дом",
+    cover: poolCover(1),
+    gallery: poolGallery(4),
+  }),
+  stub({
+    slug: "shale",
+    title: "Шале",
+    location: "Сочи",
+    objectType: "Дом",
+    category: "chastnye-doma",
+    year: "2024",
+    servicesUsed: ["dizayn-proekt", "komplektatsiya", "realizatsiya"],
+    subject: "Дом",
+    cover: poolCover(2),
+    gallery: poolGallery(5),
+  }),
+  stub({
+    slug: "millenium",
+    title: "«Миллениум»",
+    location: "Санкт-Петербург",
+    objectType: "Дом",
+    category: "chastnye-doma",
+    year: "2022",
+    servicesUsed: ["dizayn-proekt", "komplektatsiya"],
+    subject: "Дом",
+    cover: poolCover(3),
+    gallery: poolGallery(6),
+  }),
+
+  // ---------- КВАРТИРЫ (заглушки) ----------
+  stub({
+    slug: "tri-vetra",
+    title: "«Три ветра»",
+    location: "Санкт-Петербург",
+    objectType: "Квартира",
+    category: "kvartiry",
+    year: "2023",
+    servicesUsed: ["dizayn-proekt", "komplektatsiya"],
+    subject: "Квартира",
+    cover: poolCover(4),
+    gallery: poolGallery(7),
+  }),
+  stub({
+    slug: "kvartira-studenta",
+    title: "Квартира студента",
+    location: "Санкт-Петербург",
+    objectType: "Квартира",
+    category: "kvartiry",
+    year: "2025",
+    servicesUsed: ["dizayn-proekt", "dekorirovanie"],
+    subject: "Квартира",
+    cover: poolCover(5),
+    gallery: poolGallery(8),
+  }),
+  stub({
+    slug: "kvartira-oli",
+    title: "Квартира Оли",
+    location: "Санкт-Петербург",
+    objectType: "Квартира",
+    category: "kvartiry",
+    year: "2024",
+    servicesUsed: ["dizayn-proekt", "komplektatsiya"],
+    subject: "Квартира-студия",
+    cover: poolCover(6),
+    gallery: poolGallery(9),
+  }),
+
+  // ---------- ДЕКОР (заглушка) ----------
+  stub({
+    slug: "dekor-dom-kreslavskih",
+    title: "Декор. Дом Креславских",
+    location: "Санкт-Петербург",
+    objectType: "Дом",
+    category: "dekor",
+    year: "2023",
+    servicesUsed: ["dekorirovanie"],
+    subject: "Проект",
+    cover: poolCover(7),
+    gallery: poolGallery(0),
+  }),
+
+  // ---------- АВТОРСКИЕ КОНЦЕПЦИИ (заглушка-коллекция) ----------
+  stub({
+    slug: "avtorskie-kontseptsii",
+    title: "Авторские концепции",
+    location: "Студия ATRIUM",
+    objectType: "Концепт",
+    category: "avtorskie-kontseptsii",
+    year: "2023–2026",
+    servicesUsed: ["dizayn-proekt"],
+    subject: "Коллекция эскизов и идей",
+    cover: poolCover(8),
+    gallery: poolGallery(1),
+  }),
 ];
 
-export const objectTypes = ["Все объекты", "Квартира", "Дом", "Коммерция"] as const;
+export const objectTypes = ["Все объекты", "Квартира", "Дом", "Коммерция", "Концепт"] as const;

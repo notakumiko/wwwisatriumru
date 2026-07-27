@@ -6,6 +6,7 @@ import { projects } from "@/content/projects";
 import { getService } from "@/content/services";
 import { studio } from "@/content/studio";
 import { ProjectGallery } from "@/components/ProjectGallery";
+import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -98,6 +99,25 @@ export default async function ProjectPage({
           sizes="100vw"
           className="object-cover"
         />
+      </section>
+
+      <section className="section border-b border-line">
+        <div className="container-xl">
+          <p className="eyebrow mb-4">До / после</p>
+          {/* PLACEHOLDER: заменить на реальную пару "до/после" этого объекта, когда появится фото клиента */}
+          <BeforeAfterSlider
+            before={{
+              src: "/portfolio/_placeholder/ph-conservatory.jpg",
+              alt: `${project.title} — помещение до реализации`,
+              label: "До",
+            }}
+            after={{
+              src: project.cover,
+              alt: `${project.title} — интерьер после реализации`,
+              label: "После",
+            }}
+          />
+        </div>
       </section>
 
       {project.gallery.length > 0 && (

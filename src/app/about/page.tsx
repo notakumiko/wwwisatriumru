@@ -47,8 +47,8 @@ export default function AboutPage() {
               <div className="grid grid-cols-2 gap-6">
                 {highlights.map((item) => (
                   <div key={item.label}>
-                    <div className="font-serif-display text-2xl text-accent-light">{item.value}</div>
-                    <div className="mt-1 text-xs leading-snug text-stone">{item.label}</div>
+                    <div className="font-serif-display text-4xl text-accent-light">{item.value}</div>
+                    <div className="mt-2 text-xs leading-snug text-stone">{item.label}</div>
                   </div>
                 ))}
               </div>
