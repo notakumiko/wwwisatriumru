@@ -96,6 +96,7 @@ export default async function ServicePage({
           <h1 className="font-serif-display max-w-3xl text-4xl leading-tight text-ink sm:text-5xl">
             {service.h1}
           </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink/90">{service.short}</p>
         </div>
       </section>
 

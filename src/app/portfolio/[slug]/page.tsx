@@ -47,6 +47,7 @@ export default async function ProjectPage({
       description: project.summary,
       image: `${studio.url}${project.cover}`,
       creator: { "@type": "Organization", name: studio.fullName, url: studio.url },
+      author: { "@type": "Person", name: studio.founder },
       locationCreated: { "@type": "Place", name: project.location },
       dateCreated: project.year,
       url: `${studio.url}/portfolio/${project.slug}`,
@@ -133,6 +134,10 @@ export default async function ProjectPage({
               <div className="border-t border-line pt-4">
                 <dt className="eyebrow">Год</dt>
                 <dd className="mt-1 text-base text-ink">{project.year}</dd>
+              </div>
+              <div className="border-t border-line pt-4">
+                <dt className="eyebrow">Автор проекта</dt>
+                <dd className="mt-1 text-base text-ink">{studio.founder}, {studio.fullName}</dd>
               </div>
               <div className="border-t border-line pt-4">
                 <dt className="eyebrow">Услуги студии</dt>
