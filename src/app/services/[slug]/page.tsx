@@ -5,7 +5,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { PortfolioTile } from "@/components/PortfolioTile";
 import { services, getService } from "@/content/services";
-import { projects } from "@/content/projects";
+import { published } from "@/lib/portfolio";
 import { studio } from "@/content/studio";
 
 export function generateStaticParams() {
@@ -39,8 +39,8 @@ export default async function ServicePage({
   const relatedServices = service.related
     .map((s) => getService(s))
     .filter((s): s is NonNullable<typeof s> => Boolean(s));
-  const relatedProjects = projects
-    .filter((p) => p.servicesUsed.includes(service.slug))
+  const relatedProjects = published
+    .filter((p) => p.servicesUsed?.includes(service.slug))
     .slice(0, 3);
 
   const jsonLd = [

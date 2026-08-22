@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { studio } from "@/content/studio";
-import { projects } from "@/content/projects";
+import { published as projects } from "@/lib/portfolio";
 import { articles } from "@/content/articles";
 import { services } from "@/content/services";
 

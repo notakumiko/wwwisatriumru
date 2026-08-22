@@ -3,6 +3,8 @@ export type Project = {
   title: string;
   location: string;
   objectType: "Квартира" | "Дом" | "Коммерция";
+  /** Категория раздела портфолио — семь слагов из ТЗ базы */
+  category: "restaurants" | "offices" | "commercial" | "houses" | "apartments" | "decor" | "concepts";
   style: string;
   area?: string;
   year: string;
@@ -20,6 +22,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "rezidentsiya-spb",
+    category: "houses",
     title: "Частная резиденция",
     location: "Санкт-Петербург",
     objectType: "Дом",
@@ -52,6 +55,7 @@ export const projects: Project[] = [
   },
   {
     slug: "apartamenty-spb",
+    category: "apartments",
     title: "Частные апартаменты",
     location: "Санкт-Петербург",
     objectType: "Квартира",
@@ -79,6 +83,7 @@ export const projects: Project[] = [
   },
   {
     slug: "kvartira-spb",
+    category: "apartments",
     title: "Частная квартира",
     location: "Санкт-Петербург",
     objectType: "Квартира",
@@ -110,6 +115,7 @@ export const projects: Project[] = [
   },
   {
     slug: "dom-basseyn",
+    category: "houses",
     title: "Зона отдыха с бассейном в частном доме",
     location: "Санкт-Петербург",
     objectType: "Дом",
@@ -136,6 +142,7 @@ export const projects: Project[] = [
   },
   {
     slug: "bar-park-galitskogo",
+    category: "restaurants",
     title: "Бар у парка Галицкого",
     location: "Краснодар",
     objectType: "Коммерция",
@@ -162,6 +169,7 @@ export const projects: Project[] = [
   },
   {
     slug: "restorany-krasnodar",
+    category: "restaurants",
     title: "Сеть ресторанов",
     location: "Краснодар и юг России",
     objectType: "Коммерция",
@@ -192,6 +200,7 @@ export const projects: Project[] = [
   },
   {
     slug: "yoga-tsentr-alikante",
+    category: "commercial",
     title: "Йога-центр",
     location: "Аликанте, Испания",
     objectType: "Коммерция",
@@ -222,6 +231,7 @@ export const projects: Project[] = [
   },
   {
     slug: "ofisy",
+    category: "offices",
     title: "Офисы и общественные пространства",
     location: "Санкт-Петербург · Москва",
     objectType: "Коммерция",
