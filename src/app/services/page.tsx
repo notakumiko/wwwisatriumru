@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { SectionHeading } from "@/components/SectionHeading";
 import { services, comparisonRows } from "@/content/services";
 import { studio, gallery } from "@/content/studio";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
+  path: "/services",
   title: "Услуги студии дизайна интерьеров",
-  description:
-    "Полный цикл создания интерьера: дизайн-проект, комплектация, реализация, декорирование, авторские техники (барельефы, керамика, витражи, чеканка, стекло) и подбор искусства. Студия ATRIUM.",
-};
+  description: "Полный цикл создания интерьера: дизайн-проект, комплектация, реализация, декорирование, авторские техники (барельефы, керамика, витражи, чеканка, стекло) и подбор искусства. Студия ATRIUM.",
+});
 
 export default function ServicesPage() {
   return (

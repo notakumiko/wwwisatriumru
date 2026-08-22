@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -19,10 +20,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return {};
-  return {
+  return buildMetadata({
+    path: `/services/${service.slug}`,
     title: service.seoTitle,
     description: service.seoDescription,
-  };
+  });
 }
 
 export default async function ServicePage({

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -18,10 +19,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
   if (!project) return {};
-  return {
+  return buildMetadata({
+    path: `/portfolio/${project.slug}`,
     title: `${project.title} — ${project.location}`,
     description: project.summary,
-  };
+    image: project.cover,
+    type: "article",
+  });
 }
 
 export default async function ProjectPage({

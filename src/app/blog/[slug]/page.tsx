@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles } from "@/content/articles";
@@ -16,10 +17,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const article = articles.find((a) => a.slug === slug);
   if (!article) return {};
-  return {
+  return buildMetadata({
+    path: `/blog/${article.slug}`,
     title: article.title,
     description: article.excerpt,
-  };
+    type: "article",
+  });
 }
 
 function formatDate(date: string) {

@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { studio, gallery } from "@/content/studio";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
+  path: "/gallery",
   title: gallery.title,
   description: gallery.description,
-};
+});
 
 const samples = [
   { label: "Литьё и фьюзинг стекла", img: "/craft-steklo.jpg" },

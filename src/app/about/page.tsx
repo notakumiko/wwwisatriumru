@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import { SectionHeading } from "@/components/SectionHeading";
 import { studio, manifestoText, founderNote, highlights, clients } from "@/content/studio";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
+  path: "/about",
   title: "О студии",
-  description:
-    "ATRIUM — студия дизайна интерьеров полного цикла. Философия «Прошлое раскрывает будущее»: материалы, фактура и работа с частными мастерами.",
-};
+  description: "ATRIUM — студия дизайна интерьеров полного цикла. Философия «Прошлое раскрывает будущее»: материалы, фактура и работа с частными мастерами.",
+});
 
 export default function AboutPage() {
   return (

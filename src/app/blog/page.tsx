@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { articles } from "@/content/articles";
 import { studio } from "@/content/studio";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
+  path: "/blog",
   title: "Журнал",
-  description:
-    "Журнал студии ATRIUM: материалы, кейсы и события мира дизайна интерьера. Синхронизировано с Telegram-каналом.",
-};
+  description: "Журнал студии ATRIUM: материалы, кейсы и события мира дизайна интерьера. Синхронизировано с Telegram-каналом.",
+});
 
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString("ru-RU", {

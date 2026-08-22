@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PortfolioTile } from "@/components/PortfolioTile";
 import { objectTypes, projects } from "@/content/projects";
@@ -10,14 +9,20 @@ import { services } from "@/content/services";
 const ALL_SERVICES = "Все услуги";
 
 export function PortfolioGrid() {
-  const searchParams = useSearchParams();
-  const preselected = services.find((s) => s.slug === searchParams.get("usluga"));
-
   const [activeType, setActiveType] =
     useState<(typeof objectTypes)[number]>("Все объекты");
-  const [activeService, setActiveService] = useState<string>(
-    preselected ? preselected.slug : ALL_SERVICES
-  );
+  const [activeService, setActiveService] = useState<string>(ALL_SERVICES);
+
+  // Предвыбор услуги из ?usluga= читаем после монтирования, а не через
+  // useSearchParams: тот переводит страницу в клиентский рендер, и в серверной
+  // разметке не остаётся ни карточек, ни ссылок на проекты — для Яндекса и
+  // ИИ-поисковиков раздел выглядит пустым.
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("usluga");
+    if (requested && services.some((s) => s.slug === requested)) {
+      setActiveService(requested);
+    }
+  }, []);
 
   const filtered = projects.filter((p) => {
     const typeOk = activeType === "Все объекты" || p.objectType === activeType;
