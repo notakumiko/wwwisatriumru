@@ -6,7 +6,7 @@ import { MiniLeadForm } from "@/components/MiniLeadForm";
 import { HeroIntro } from "@/components/HeroIntro";
 import { studio, manifestoText, highlights, clients } from "@/content/studio";
 import { services } from "@/content/services";
-import { projects } from "@/content/projects";
+import { published as projects } from "@/lib/portfolio";
 import { articles } from "@/content/articles";
 
 const process = [

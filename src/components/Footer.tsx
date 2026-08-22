@@ -61,6 +61,9 @@ export function Footer() {
           <span>
             © {new Date().getFullYear()} {studio.fullName}. Все права защищены.
           </span>
+          <Link href="/privacy" className="hover:text-accent-light">
+            Политика обработки персональных данных
+          </Link>
           <span>{studio.geo.join(" · ")}</span>
         </div>
       </div>

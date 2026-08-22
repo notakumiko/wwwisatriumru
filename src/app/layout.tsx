@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { studio } from "@/content/studio";
+import { DEFAULT_OG_IMAGE } from "@/lib/seo";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -43,13 +44,30 @@ export const metadata: Metadata = {
   openGraph: {
     title: `${studio.name} — студия дизайна интерьеров | Дизайн-проект и комплектация под ключ`,
     description: studio.description,
-    url: studio.url,
+    url: "/",
     siteName: studio.name,
     locale: "ru_RU",
     type: "website",
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: `${studio.name} — студия дизайна интерьеров`,
+      },
+    ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: `${studio.name} — студия дизайна интерьеров`,
+    description: studio.description,
+    images: [DEFAULT_OG_IMAGE],
+  },
+  // Только для главной. Каждая внутренняя страница объявляет свой canonical
+  // через buildMetadata — иначе Next наследует этот и объявит все страницы
+  // копиями главной.
   alternates: {
-    canonical: studio.url,
+    canonical: "/",
   },
 };
 

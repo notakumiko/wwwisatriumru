@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { ContactForm } from "@/components/ContactForm";
 import { studio } from "@/content/studio";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
+  path: "/contact",
   title: "Контакты",
-  description:
-    "Свяжитесь со студией ATRIUM: WhatsApp, Telegram, Instagram и e-mail. Ведём проекты в Москве, Санкт-Петербурге, Сочи, Ташкенте и Аликанте.",
-};
+  description: "Свяжитесь со студией ATRIUM: WhatsApp, Telegram, Instagram и e-mail. Ведём проекты в Москве, Санкт-Петербурге, Сочи, Ташкенте и Аликанте.",
+});
 
 export default function ContactPage() {
   return (

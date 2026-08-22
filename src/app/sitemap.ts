@@ -1,11 +1,20 @@
 import type { MetadataRoute } from "next";
 import { studio } from "@/content/studio";
-import { projects } from "@/content/projects";
+import { published as projects } from "@/lib/portfolio";
 import { articles } from "@/content/articles";
 import { services } from "@/content/services";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/about", "/services", "/portfolio", "/gallery", "/blog", "/contact"].map(
+  const staticRoutes = [
+    "",
+    "/about",
+    "/services",
+    "/portfolio",
+    "/gallery",
+    "/blog",
+    "/contact",
+    "/privacy",
+  ].map(
     (path) => ({
       url: `${studio.url}${path}`,
       lastModified: new Date(),

@@ -1,76 +1,85 @@
 "use client";
 
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PortfolioTile } from "@/components/PortfolioTile";
-import { objectTypes, projects } from "@/content/projects";
+import { activeCategories, portfolio } from "@/lib/portfolio";
 import { services } from "@/content/services";
 
+const ALL = "";
 const ALL_SERVICES = "Все услуги";
 
 export function PortfolioGrid() {
-  const searchParams = useSearchParams();
-  const preselected = services.find((s) => s.slug === searchParams.get("usluga"));
+  const [activeCat, setActiveCat] = useState<string>(ALL);
+  const [activeService, setActiveService] = useState<string>(ALL_SERVICES);
 
-  const [activeType, setActiveType] =
-    useState<(typeof objectTypes)[number]>("Все объекты");
-  const [activeService, setActiveService] = useState<string>(
-    preselected ? preselected.slug : ALL_SERVICES
-  );
+  // Предвыбор услуги из ?usluga= читаем после монтирования, а не через
+  // useSearchParams: тот переводит страницу в клиентский рендер, и в серверной
+  // разметке не остаётся ни карточек, ни ссылок на проекты — для Яндекса и
+  // ИИ-поисковиков раздел выглядит пустым.
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("usluga");
+    if (requested && services.some((s) => s.slug === requested)) {
+      setActiveService(requested);
+    }
+  }, []);
 
-  const filtered = projects.filter((p) => {
-    const typeOk = activeType === "Все объекты" || p.objectType === activeType;
+  // Фильтр услуг показываем, только пока у проектов есть привязка к услугам
+  // (у рукописных кейсов она есть, у проектов из фотобазы — нет).
+  const anyServices = portfolio.some((p) => p.servicesUsed?.length);
+
+  const filtered = portfolio.filter((p) => {
+    const catOk = activeCat === ALL || p.category === activeCat;
     const serviceOk =
-      activeService === ALL_SERVICES || p.servicesUsed.includes(activeService);
-    return typeOk && serviceOk;
+      activeService === ALL_SERVICES || p.servicesUsed?.includes(activeService);
+    return catOk && serviceOk;
   });
+
+  const chip = (active: boolean) =>
+    `px-4 py-2 text-sm transition-colors ${
+      active
+        ? "bg-accent text-deep"
+        : "border border-line text-stone hover:border-accent hover:text-accent-light"
+    }`;
 
   return (
     <div>
       <div className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="w-24 text-xs uppercase tracking-[0.2em] text-stone">Тип</span>
-          {objectTypes.map((type) => (
-            <button
-              key={type}
-              onClick={() => setActiveType(type)}
-              className={`px-4 py-2 text-sm transition-colors ${
-                activeType === type
-                  ? "bg-accent text-deep"
-                  : "border border-line text-stone hover:border-accent hover:text-accent-light"
-              }`}
-            >
-              {type}
-            </button>
-          ))}
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="w-24 text-xs uppercase tracking-[0.2em] text-stone">Услуга</span>
-          <button
-            onClick={() => setActiveService(ALL_SERVICES)}
-            className={`px-4 py-2 text-sm transition-colors ${
-              activeService === ALL_SERVICES
-                ? "bg-accent text-deep"
-                : "border border-line text-stone hover:border-accent hover:text-accent-light"
-            }`}
-          >
-            {ALL_SERVICES}
+          <span className="w-24 text-xs uppercase tracking-[0.2em] text-stone">Раздел</span>
+          <button onClick={() => setActiveCat(ALL)} className={chip(activeCat === ALL)}>
+            Все проекты
           </button>
-          {services.map((service) => (
+          {activeCategories.map((c) => (
             <button
-              key={service.slug}
-              onClick={() => setActiveService(service.slug)}
-              className={`px-4 py-2 text-sm transition-colors ${
-                activeService === service.slug
-                  ? "bg-accent text-deep"
-                  : "border border-line text-stone hover:border-accent hover:text-accent-light"
-              }`}
+              key={c.slug}
+              onClick={() => setActiveCat(c.slug)}
+              className={chip(activeCat === c.slug)}
             >
-              {service.title}
+              {c.label}
             </button>
           ))}
         </div>
+        {anyServices && (
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="w-24 text-xs uppercase tracking-[0.2em] text-stone">Услуга</span>
+            <button
+              onClick={() => setActiveService(ALL_SERVICES)}
+              className={chip(activeService === ALL_SERVICES)}
+            >
+              {ALL_SERVICES}
+            </button>
+            {services.map((service) => (
+              <button
+                key={service.slug}
+                onClick={() => setActiveService(service.slug)}
+                className={chip(activeService === service.slug)}
+              >
+                {service.title}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {filtered.length > 0 ? (
@@ -89,8 +98,8 @@ export function PortfolioGrid() {
         </div>
       ) : (
         <p className="mt-12 text-sm text-stone">
-          С таким сочетанием фильтров проектов пока нет — попробуйте другой тип
-          объекта или услугу.
+          С таким сочетанием фильтров проектов пока нет — попробуйте другой раздел
+          или услугу.
         </p>
       )}
     </div>

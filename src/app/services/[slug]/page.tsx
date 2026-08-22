@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { PortfolioTile } from "@/components/PortfolioTile";
 import { services, getService } from "@/content/services";
-import { projects } from "@/content/projects";
+import { published } from "@/lib/portfolio";
 import { studio } from "@/content/studio";
 
 export function generateStaticParams() {
@@ -19,10 +20,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return {};
-  return {
+  return buildMetadata({
+    path: `/services/${service.slug}`,
     title: service.seoTitle,
     description: service.seoDescription,
-  };
+  });
 }
 
 export default async function ServicePage({
@@ -37,8 +39,8 @@ export default async function ServicePage({
   const relatedServices = service.related
     .map((s) => getService(s))
     .filter((s): s is NonNullable<typeof s> => Boolean(s));
-  const relatedProjects = projects
-    .filter((p) => p.servicesUsed.includes(service.slug))
+  const relatedProjects = published
+    .filter((p) => p.servicesUsed?.includes(service.slug))
     .slice(0, 3);
 
   const jsonLd = [
