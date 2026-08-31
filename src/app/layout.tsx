@@ -3,6 +3,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { FloatingContactRail } from "@/components/FloatingContactRail";
 import { studio } from "@/content/studio";
 
 const playfair = Playfair_Display({
@@ -47,6 +48,20 @@ export const metadata: Metadata = {
     siteName: studio.name,
     locale: "ru_RU",
     type: "website",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: `${studio.name} — дизайн-студия интерьеров`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${studio.name} — студия дизайна интерьеров`,
+    description: studio.description,
+    images: ["/og-image.jpg"],
   },
   alternates: {
     canonical: studio.url,
@@ -72,6 +87,8 @@ export default function RootLayout({
     areaServed: studio.geo,
     email: studio.contacts.email,
     telephone: studio.contacts.whatsappDisplay,
+    image: `${studio.url}/og-image.jpg`,
+    logo: `${studio.url}/og-image.jpg`,
     sameAs: [
       studio.contacts.telegram,
       studio.contacts.instagram,
@@ -91,6 +108,7 @@ export default function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <FloatingContactRail />
       </body>
     </html>
   );

@@ -39,12 +39,15 @@ export default async function ArticlePage({
   const article = articles.find((a) => a.slug === slug);
   if (!article) notFound();
 
+  const dateModified = article.dateModified ?? article.date;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title,
     description: article.excerpt,
     datePublished: article.date,
+    dateModified,
     author: {
       "@type": "Person",
       name: studio.founder,
@@ -72,6 +75,12 @@ export default async function ArticlePage({
           <h1 className="font-serif-display max-w-3xl text-4xl leading-tight text-ink sm:text-5xl">
             {article.title}
           </h1>
+          <p className="mt-4 text-sm text-stone">
+            Автор: {studio.founder}, {studio.fullName}
+            {dateModified !== article.date && (
+              <> · Обновлено {formatDate(dateModified)}</>
+            )}
+          </p>
         </div>
       </section>
 

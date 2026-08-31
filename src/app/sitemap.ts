@@ -5,7 +5,18 @@ import { articles } from "@/content/articles";
 import { services } from "@/content/services";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/about", "/services", "/portfolio", "/gallery", "/blog", "/contact"].map(
+  const staticRoutes = [
+    "",
+    "/about",
+    "/services",
+    "/portfolio",
+    "/gallery",
+    "/blog",
+    "/contact",
+    "/calculator",
+    "/art-materialy",
+    "/predstavitelstvo",
+  ].map(
     (path) => ({
       url: `${studio.url}${path}`,
       lastModified: new Date(),
