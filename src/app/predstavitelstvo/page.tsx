@@ -11,8 +11,22 @@ export const metadata: Metadata = {
 };
 
 export default function PredstavitelstvoPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Главная", item: studio.url },
+      { "@type": "ListItem", position: 2, name: "Комплектация", item: `${studio.url}/services/komplektatsiya` },
+      { "@type": "ListItem", position: 3, name: "Представительство", item: `${studio.url}/predstavitelstvo` },
+    ],
+  };
+
   return (
     <section className="section pt-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="container-xl">
         <p className="eyebrow mb-4">Комплектация</p>
         <h1 className="font-serif-display max-w-3xl text-4xl leading-tight text-ink sm:text-5xl">

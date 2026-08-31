@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PricingQuiz } from "@/components/PricingQuiz";
 import { ContractSampleBlock } from "@/components/ContractSampleBlock";
+import { studio } from "@/content/studio";
 
 export const metadata: Metadata = {
   title: "Рассчитать стоимость проекта",
@@ -9,8 +10,21 @@ export const metadata: Metadata = {
 };
 
 export default function CalculatorPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Главная", item: studio.url },
+      { "@type": "ListItem", position: 2, name: "Рассчитать стоимость проекта", item: `${studio.url}/calculator` },
+    ],
+  };
+
   return (
     <section className="section pt-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="container-xl grid gap-12 md:grid-cols-12">
         <div className="md:col-span-5">
           <p className="eyebrow mb-4">Калькулятор</p>
