@@ -8,6 +8,7 @@ export type Service = {
   seoTitle: string;
   seoDescription: string;
   ctaLabel: string;
+  cover?: string;
   short: string;
   forWhom: string[];
   description: string[];
@@ -96,6 +97,8 @@ export const services: Service[] = [
     seoDescription:
       "Подбор и закупка мебели, света, текстиля и декора точно по проекту: работа с поставщиками и производствами, логистика, контроль качества. Студия ATRIUM.",
     ctaLabel: "Обсудить комплектацию",
+    // PLACEHOLDER: заменить на фото готовой комплектации объекта студии
+    cover: "/portfolio/_placeholder/ph-relief-panel-gold.jpg",
     short:
       "Подбор и закупка мебели, света, текстиля, декоративной штукатурки и декора точно по проекту — с поставщиками, логистикой и контролем качества.",
     forWhom: [

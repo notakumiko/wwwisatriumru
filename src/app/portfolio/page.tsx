@@ -12,7 +12,6 @@ export default function PortfolioPage() {
   return (
     <section className="section pt-16">
       <div className="container-xl">
-        <h1 className="sr-only">Портфолио студии ATRIUM</h1>
         <Suspense>
           <PortfolioGrid />
         </Suspense>

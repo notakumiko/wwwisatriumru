@@ -4,6 +4,8 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { PortfolioTile } from "@/components/PortfolioTile";
 import { MiniLeadForm } from "@/components/MiniLeadForm";
 import { HeroIntro } from "@/components/HeroIntro";
+import { FullCycleBanner } from "@/components/FullCycleBanner";
+import { PortfolioLeadBanner } from "@/components/PortfolioLeadBanner";
 import { studio, manifestoText, highlights, clients } from "@/content/studio";
 import { services } from "@/content/services";
 import { projects } from "@/content/projects";
@@ -42,12 +44,14 @@ export default function Home() {
         </div>
       </section>
 
+      <FullCycleBanner />
+
       <div className="border-b border-line">
-        <div className="container-xl grid grid-cols-2 gap-6 py-8 sm:grid-cols-4">
+        <div className="container-xl grid grid-cols-2 gap-8 py-10 sm:grid-cols-4">
           {highlights.map((item) => (
             <div key={item.label}>
-              <div className="font-serif-display text-3xl text-accent-light">{item.value}</div>
-              <div className="mt-1 text-xs leading-snug text-stone">{item.label}</div>
+              <div className="font-serif-display text-5xl text-accent-light sm:text-6xl">{item.value}</div>
+              <div className="mt-2 text-sm leading-snug text-stone">{item.label}</div>
             </div>
           ))}
         </div>
@@ -89,6 +93,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <PortfolioLeadBanner />
 
       {/* SERVICES */}
       <section className="section">

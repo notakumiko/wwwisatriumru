@@ -3,6 +3,7 @@ export type Article = {
   title: string;
   excerpt: string;
   date: string;
+  dateModified?: string; // если статью дорабатывали после публикации; по умолчанию = date
   tag: string;
   body: string[];
 };

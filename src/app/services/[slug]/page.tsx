@@ -3,8 +3,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { PortfolioTile } from "@/components/PortfolioTile";
+import { ComplectationTable } from "@/components/ComplectationTable";
+import { ContractSampleBlock } from "@/components/ContractSampleBlock";
 import { services, getService } from "@/content/services";
 import { projects } from "@/content/projects";
+import { complectationCatalog } from "@/content/materials";
 import { studio } from "@/content/studio";
 
 export function generateStaticParams() {
@@ -64,6 +67,20 @@ export default async function ServicePage({
         acceptedAnswer: { "@type": "Answer", text: item.a },
       })),
     },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Главная", item: studio.url },
+        { "@type": "ListItem", position: 2, name: "Услуги", item: `${studio.url}/services` },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: service.title,
+          item: `${studio.url}/services/${service.slug}`,
+        },
+      ],
+    },
   ];
 
   return (
@@ -82,8 +99,22 @@ export default async function ServicePage({
           <h1 className="font-serif-display max-w-3xl text-4xl leading-tight text-ink sm:text-5xl">
             {service.h1}
           </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink/90">{service.short}</p>
         </div>
       </section>
+
+      {service.cover && (
+        <section className="relative aspect-[21/9] w-full">
+          <Image
+            src={service.cover}
+            alt={service.h1}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        </section>
+      )}
 
       <section className="section">
         <div className="container-xl grid gap-12 md:grid-cols-12">
@@ -184,6 +215,31 @@ export default async function ServicePage({
                   ))}
                 </div>
               </div>
+            )}
+
+            {service.slug === "komplektatsiya" && (
+              <>
+                <div className="mt-10 border-t border-line pt-8">
+                  <p className="eyebrow mb-2">Пример каталога</p>
+                  <p className="mb-6 text-sm text-stone">
+                    Так выглядит таблица комплектации по проекту — конкретные
+                    позиции, бренды и сроки поставки. Ниже — условный пример.
+                  </p>
+                  <ComplectationTable rows={complectationCatalog} />
+                  <div className="mt-4 flex flex-wrap gap-4 text-sm">
+                    <Link href="/art-materialy" className="text-ink hover:text-accent-light">
+                      Арт-материалы студии →
+                    </Link>
+                    <Link href="/predstavitelstvo" className="text-ink hover:text-accent-light">
+                      Представительство и партнёры →
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="mt-10 border-t border-line pt-8">
+                  <ContractSampleBlock />
+                </div>
+              </>
             )}
 
             <a

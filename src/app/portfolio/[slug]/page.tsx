@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { projects } from "@/content/projects";
 import { getService } from "@/content/services";
 import { studio } from "@/content/studio";
+import { ProjectGallery } from "@/components/ProjectGallery";
+import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -38,17 +40,34 @@ export default async function ProjectPage({
     .map((s) => getService(s))
     .filter((s): s is NonNullable<typeof s> => Boolean(s));
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    name: project.title,
-    description: project.summary,
-    image: `${studio.url}${project.cover}`,
-    creator: { "@type": "Organization", name: studio.fullName, url: studio.url },
-    locationCreated: { "@type": "Place", name: project.location },
-    dateCreated: project.year,
-    url: `${studio.url}/portfolio/${project.slug}`,
-  };
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      name: project.title,
+      description: project.summary,
+      image: `${studio.url}${project.cover}`,
+      creator: { "@type": "Organization", name: studio.fullName, url: studio.url },
+      author: { "@type": "Person", name: studio.founder },
+      locationCreated: { "@type": "Place", name: project.location },
+      dateCreated: project.year,
+      url: `${studio.url}/portfolio/${project.slug}`,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Главная", item: studio.url },
+        { "@type": "ListItem", position: 2, name: "Портфолио", item: `${studio.url}/portfolio` },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: project.title,
+          item: `${studio.url}/portfolio/${project.slug}`,
+        },
+      ],
+    },
+  ];
 
   return (
     <>
@@ -82,21 +101,31 @@ export default async function ProjectPage({
         />
       </section>
 
+      <section className="section border-b border-line">
+        <div className="container-xl">
+          <p className="eyebrow mb-4">До / после</p>
+          {/* PLACEHOLDER: заменить на реальную пару "до/после" этого объекта, когда появится фото клиента */}
+          <BeforeAfterSlider
+            before={{
+              src: "/portfolio/_placeholder/ph-conservatory.jpg",
+              alt: `${project.title} — помещение до реализации`,
+              label: "До",
+            }}
+            after={{
+              src: project.cover,
+              alt: `${project.title} — интерьер после реализации`,
+              label: "После",
+            }}
+          />
+        </div>
+      </section>
+
       {project.gallery.length > 0 && (
         <section className="border-b border-line bg-surface py-6">
-          <div className="container-xl grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {project.gallery.map((src) => (
-              <div key={src} className="relative aspect-[4/5] overflow-hidden">
-                <Image
-                  src={src}
-                  alt={`${project.title} — деталь интерьера, ${project.location}`}
-                  fill
-                  sizes="(max-width: 640px) 50vw, 25vw"
-                  className="object-cover transition-transform duration-500 hover:scale-[1.04]"
-                />
-              </div>
-            ))}
-          </div>
+          <ProjectGallery
+            images={project.gallery}
+            alt={`${project.title} — деталь интерьера, ${project.location}`}
+          />
         </section>
       )}
 
@@ -125,6 +154,10 @@ export default async function ProjectPage({
               <div className="border-t border-line pt-4">
                 <dt className="eyebrow">Год</dt>
                 <dd className="mt-1 text-base text-ink">{project.year}</dd>
+              </div>
+              <div className="border-t border-line pt-4">
+                <dt className="eyebrow">Автор проекта</dt>
+                <dd className="mt-1 text-base text-ink">{studio.founder}, {studio.fullName}</dd>
               </div>
               <div className="border-t border-line pt-4">
                 <dt className="eyebrow">Услуги студии</dt>
